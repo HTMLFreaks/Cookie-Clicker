@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+    <style>
+        #adder {
+            width: 100px;
+            height: 100px;
+            font-size: 45px;
+        }
+.elementToFadeInAndOut {
+    -webkit-animation: fadeInOut 2s linear forwards;
+    animation: fadeInOut 2s linear forwards;
+}
+@-webkit-keyframes fadeInOut {
+ 0% { opacity:0; }
+ 25% { opacity:1; }
+    50% {transform: scaleX(0.5) scaleY(0.5);}
+ 100% { opacity:0; } 
+}
+@keyframes fadeInOut {
+ 0% { opacity:0; }
+ 25% { opacity:1; } 
+    50% {transform: scaleX(0.5) scaleY(0.5);}
+ 100% { opacity:0; } 
+}
+        
+        input {
+            border-width: 0px;
+        }
+        #score {
+            font-family: "Times New Roman";
+            font-size: 70px;
+        }
+        #cookie:hover {
+            opacity: 0.5;
+            filter: alpha(opacity=50);
+        }
+        #cookie:active {
+            transform: translateY(4px);
+            opacity: 0;
+            filter: alpha(opacity=50);
+        }
+        #upgradecontainer {
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0);
+            display: -webkit-flex;
+            -webkit-align-items: center;
+            display: flex;
+            align-items: center;  
+        }
+        button {
+           width: 1000px;
+           height: 49px;
+           background-color: blue;
+           text-align: left;
+           font-size: 40px;
+           border-radius: 12px;
+        }
+        button:active {
+           transform: translateY(4px);
+           box-shadow: 10px 10px rgba(1, 1, 1, 0.8);
+        }
+    </style>
+    <title>Cookie Clicker</title>
+    <body><pre>
+    <div id="adder">
+    </div>
+    <input id="score" type="number" value="0" readonly>
+    <div id="upgradecontainer">
+    <div style="display: inline-block"><img id="cookie" src="" height="420" width="420"></div><div style="display: inline-block" height="100px">
+<button id="upgrade1">Click x2</button>
+<button id="upgrade2">Click x3</button>
+<button id="upgrade3">Click x4</button>
+<button id="upgrade4">Click x5</button>
+<button id="upgrade5">Finish and Restart</button>
+</div>
+</div>
+    <input id="currentlevel" type="number" value="1" hidden>
+    </pre>
+    </body>
+</html>
+<script>
+var score = document.getElementById("score");
+var cookie = document.getElementById("cookie");
+var adder = document.getElementById("adder");
+var upgrade_button1 = document.getElementById("upgrade1");
+var upgrade_button2 = document.getElementById("upgrade2");
+var upgrade_button3 = document.getElementById("upgrade3");
+var upgrade_button4 = document.getElementById("upgrade4");
+upgrade_button1.style.visibility = "hidden";
+upgrade_button2.style.visibility = "hidden";
+upgrade_button3.style.visibility = "hidden";
+upgrade_button4.style.visibility = "hidden";
+    
+
+var end_button = document.getElementById("upgrade5");
+end_button.style.visibility = "hidden";
+
+var currentupgrade = document.getElementById("currentlevel");
+var upgradebuttonclicked1 = "false";
+var upgradebuttonclicked2 = "false";
+    cookie.onload = function() {
+    cookie.onmousedown = function(event) {
+        if (score.value >= 100) {
+            if (upgradebuttonclicked1 == "true") {
+                if (upgradebuttonclicked2 == "true") {
+                upgrade_button1.style.visibility = "hidden";
+                upgrade_button2.style.visibility = "hidden";
+                upgrade_button3.style.visibility = "hidden";
+                upgrade_button4.style.visibility = "hidden";
+                end_button.style.visibility = "hidden";
+                }
+            }
+            if (upgradebuttonclicked1 == "false") {
+                
+                upgrade_button1.style.visibility = "visible";
+                upgrade_button2.style.visibility = "hidden";
+                upgrade_button3.style.visibility = "hidden";
+                upgrade_button4.style.visibility = "hidden";
+                end_button.style.visibility = "hidden";
+            }
+        }
+        if (score.value >= 1000) {
+                if (upgradebuttonclicked1 == "true") {
+                    if (upgradebuttonclicked2 == "true") {
+                upgrade_button1.style.visibility = "hidden";
+                upgrade_button2.style.visibility = "hidden";
+                upgrade_button3.style.visibility = "hidden";
+                upgrade_button4.style.visibility = "hidden";
+                end_button.style.visibility = "hidden";
+              }
+            }
+            if (upgradebuttonclicked2 == "false") {
+                upgradebuttonclicked2 = "true";
+                upgrade_button1.style.visibility = "visible";
+                upgrade_button2.style.visibility = "visible";
+                upgrade_button3.style.visibility = "hidden";
+                upgrade_button4.style.visibility = "hidden";
+                end_button.style.visibility = "hidden";
+            }
+        }
+    score.stepUp(currentupgrade.value);
+    score.value = score.value;
+    adder.innerHTML = "+ " + currentupgrade.value + " Cookies";
+    var x = event.clientX;
+    var y = event.clientY;
+        adder.style.position = "absolute";
+        adder.style.top = y + 'px'; 
+        adder.style.left = x + 'px'; 
+        adder.style.visibility = "visible";
+        adder.classList.add("elementToFadeInAndOut");
+        setTimeout(function(){adder.classList.remove("elementToFadeInAndOut");}, 4000);
+    };
+    };
+    upgrade_button1.onmousedown = function() {
+        currentupgrade.stepUp(1);
+        currentupgrade.value = currentupgrade.value;
+        upgrade_button1.style.visibility = "hidden";
+        upgradebuttonclicked1 = "true";
+    };
+    upgrade_button2.onmousedown = function() {
+        currentupgrade.stepUp(2);
+        currentupgrade.value = currentupgrade.value;
+        upgrade_button1.style.visibility = "hidden";
+        upgradebuttonclicked1 = "true";
+        upgradebuttonclicked2 = "true";
+    };
+function forceDownload(url, fileName){
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", url, true);
+    xhr.responseType = "blob";
+    xhr.onload = function(){
+        var urlCreator = window.URL || window.webkitURL;
+        var imageUrl = urlCreator.createObjectURL(this.response);
+        var tag = document.createElement('a');
+        tag.href = imageUrl;
+        tag.download = fileName;
+        document.body.appendChild(tag);
+        document.body.removeChild(tag);
+        cookie.src = tag;
+    };
+    xhr.send();
+}
+forceDownload("https://raw.githubusercontent.com/HTMLFreaks/Cookie-Clicker/Resources/images.jpeg", "ImageFile.png");
+</script>
